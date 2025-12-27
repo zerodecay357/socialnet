@@ -8,34 +8,27 @@ SocialNet is a command-line backend simulator for a social network, developed as
 
 ### Social Network Operations
 
-* 
 **User Management**: Add new users to the network.
 
 
-* 
 **Friendship Management**: Establish bidirectional friendships between existing users.
 
 
-* 
 **Friend Listings**: Retrieve an alphabetically sorted list of a user's friends.
 
 
-* 
 **Friend Suggestions**: Recommends "friends of a friend" ranked by mutual connection counts.
 
 
-* 
 **Degrees of Separation**: Calculate the shortest path between two users using Breadth-First Search (BFS).
 
 
 
 ### User Content Operations
 
-* 
 **Post Creation**: Users can create posts with text content, automatically timestamped.
 
 
-* 
 **Chronological Feed**: Retrieve the  most recent posts from a user in reverse chronological order.
 
 
@@ -51,12 +44,11 @@ The project strictly avoids standard library containers for core logic, implemen
 * **Graph**: Users are represented as vertices, and friendships are undirected edges. This allows for efficient traversal for "Degrees of Separation".
 
 
-* 
 **AVL Tree (Posts)**: To ensure that retrieving the  latest posts is efficient, posts are stored in a self-balancing AVL tree keyed by timestamp.
 
 
 * **AVL Tree (Friends)**: While the graph manages connections, each user maintains an internal AVL tree of friends to allow for  insertion and alphabetical retrieval.
-* 
+
 **Hash Map**: A `std::unordered_map` is used to map username strings to User objects for  average-case lookup.
 
 
