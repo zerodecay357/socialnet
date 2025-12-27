@@ -1,6 +1,6 @@
 # SocialNet Simulator
 
-SocialNet is a command-line social network backend simulator developed for the **COL106: Data Structures** course. The system manages users, friendships, and content using advanced data structures including **AVL Trees** for post management and **Graphs** for representing the social network.
+SocialNet is a command-line backend simulator for a social network, developed as part of the **COL106: Data Structures** course. The system manages users, friendships, and content using custom-implemented data structures to ensure efficiency in a networked environment.
 
 ---
 
@@ -13,138 +13,113 @@ SocialNet is a command-line social network backend simulator developed for the *
 
 
 * 
-**Friendship Management**: Establish bidirectional friendships between users.
+**Friendship Management**: Establish bidirectional friendships between existing users.
 
 
 * 
-**Friend Listings**: View an alphabetically sorted list of any user's friends.
+**Friend Listings**: Retrieve an alphabetically sorted list of a user's friends.
 
 
 * 
-**Friend Suggestions**: Recommends "friends of a friend" based on mutual connection counts.
+**Friend Suggestions**: Recommends "friends of a friend" ranked by mutual connection counts.
 
 
 * 
-**Degrees of Separation**: Calculate the shortest friendship path between two users using graph traversal.
+**Degrees of Separation**: Calculate the shortest path between two users using Breadth-First Search (BFS).
 
 
 
 ### User Content Operations
 
 * 
-**Post Creation**: Users can create posts with text content.
+**Post Creation**: Users can create posts with text content, automatically timestamped.
 
 
 * 
-**Chronological Feed**: Retrieve the  most recent posts from a user in reverse chronological order using an AVL Tree.
+**Chronological Feed**: Retrieve the  most recent posts from a user in reverse chronological order.
 
 
 
 ---
 
-## 🛠️ System Architecture
+## 🛠️ System Architecture & Design Decisions
 
-The simulator is built from scratch without using standard library containers for the core logic (except for `unordered_map` to map usernames to vertices):
+The project strictly avoids standard library containers for core logic, implementing fundamental data structures from scratch.
 
-* 
-**Graph**: Represents users as vertices and friendships as undirected edges.
+### Data Structures
 
-
-* 
-**AVL Tree (Posts)**: Stores user posts sorted by creation timestamp for efficient retrieval.
+* **Graph**: Users are represented as vertices, and friendships are undirected edges. This allows for efficient traversal for "Degrees of Separation".
 
 
 * 
-**AVL Tree (Friends)**: Maintains a user's friend list in alphabetical order.
+**AVL Tree (Posts)**: To ensure that retrieving the  latest posts is efficient, posts are stored in a self-balancing AVL tree keyed by timestamp.
 
 
-
----
-
-## 💻 Technical Requirements
-
-* **Language**: C++
-* **Compiler**: `g++` (supports C++11 or higher)
+* **AVL Tree (Friends)**: While the graph manages connections, each user maintains an internal AVL tree of friends to allow for  insertion and alphabetical retrieval.
 * 
-**Input**: Interactive command-line interface (stdin).
+**Hash Map**: A `std::unordered_map` is used to map username strings to User objects for  average-case lookup.
 
 
+
+### Complexity Analysis
+
+| Operation | Data Structure | Time Complexity |
+| --- | --- | --- |
+| **Add User** | Hash Map |  average |
+| **Add Friend** | AVL Tree |  where  is number of friends |
+| **List Friends** | AVL Tree |  (In-order traversal) |
+| **Add Post** | AVL Tree |  where  is number of posts |
+| **Output  Posts** | AVL Tree |  |
+| **Separation** | Graph (BFS) |  where  = users,  = friendships |
 
 ---
 
 ## 📖 Command Reference
 
-### User & Friendship Commands
+The simulator accepts commands via `stdin` at runtime. Commands and usernames are case-insensitive.
 
-| Command | Description |
+| Command | Usage |
 | --- | --- |
-| `ADD USER <username>` | Adds a new user to the network.
-
- |
-| `ADD FRIEND <u1> <u2>` | Creates a bidirectional friendship.
-
- |
-| `LIST FRIENDS <username>` | Lists all friends alphabetically.
-
- |
-| `SUGGEST FRIENDS <u1> <N>` | Suggests up to  friends based on mutuals.
-
- |
-| `DEGREES OF SEPARATION <u1> <u2>` | Finds the shortest friendship path.
-
- |
-
-### Content Commands
-
-| Command | Description |
-| --- | --- |
-| `ADD POST <username> "<content>"` | Adds a post for the specified user.
-
- |
-| `OUTPUT POSTS <username> <N>` | Shows  latest posts (use -1 for all).
-
- |
-
-### System Commands
-
-* **HELP**: Displays the command reference.
-* **CLEAR**: Clears the terminal screen.
-* **EXIT**: Gracefully closes the simulator.
-
-> 
-> **Note:** Usernames and commands are case-insensitive. Post content must be enclosed in double quotes.
-> 
-> 
+| **ADD USER** | `ADD USER <username>` |
+| **ADD FRIEND** | `ADD FRIEND <user1> <user2>` |
+| **LIST FRIENDS** | `LIST FRIENDS <username>` |
+| **SUGGEST FRIENDS** | `SUGGEST FRIENDS <username> <N>` |
+| **DEGREES OF SEPARATION** | `DEGREES OF SEPARATION <user1> <user2>` |
+| **ADD POST** | `ADD POST <username> "<content>"` |
+| **OUTPUT POSTS** | `OUTPUT POSTS <username> <N>` |
+| **HELP** | Displays the command reference. |
+| **EXIT** | Terminates the simulator. |
 
 ---
 
-## 🛠️ Installation & Usage
+## 💻 Installation & Execution
 
-1. **Compile the code**:
+### Prerequisites
+
+* A C++ compiler supporting **C++17** (e.g., `g++`).
+
+### Compilation
+
+You can compile manually or use the provided shell script:
+
 ```bash
-g++ -o socialnet main.cpp
+# Using the shell script
+chmod +x compile.sh
+./compile.sh
+
+# Manual compilation
+g++ -std=c++17 -O2 -Wall -Wextra -o socialnet main.cpp
 
 ```
 
+### Running the Simulator
 
-2. **Run the simulator**:
+Once compiled, run the executable:
+
 ```bash
 ./socialnet
 
 ```
-
-
-3. **Example Session**:
-```text
-socialnet>> ADD USER Alice
-socialnet>> ADD USER Bob
-socialnet>> ADD FRIEND Alice Bob
-socialnet>> ADD POST Alice "My first post!"
-socialnet>> OUTPUT POSTS Alice 1
-
-```
-
-
 
 ---
 
